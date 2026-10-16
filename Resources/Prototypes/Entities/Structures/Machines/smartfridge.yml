@@ -72,6 +72,7 @@
       - Bottle
       - Syringe
       - ChemDispensable
+  - type: ESForcedFacingUi # Goob
   - type: ActivatableUI
     key: enum.SmartFridgeUiKey.Key
   - type: ActivatableUIRequiresPower

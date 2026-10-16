@@ -57,6 +57,7 @@
   physicalDesc: reagent-physical-desc-creamy
   flavor: creamy
   color: "#DFD7AF"
+  puddleColor: "#DFD7AFCC" # Goob
   metabolisms:
     Drink:
       effects:
@@ -71,6 +72,8 @@
   physicalDesc: reagent-physical-desc-milky
   flavor: nutty
   color: "#f4eadb"
+  puddleSpriteSet: Shiny # Goob
+  puddleColor: "#f4eadbCC" # Goob
   metabolisms:
     Drink:
       effects:
@@ -85,6 +88,7 @@
   physicalDesc: reagent-physical-desc-syrupy
   flavor: creamy
   color: "#FFEABF"
+  puddleColor: "#FFEABFCC" # Goob
   metabolisms:
     Drink:
       effects:
@@ -123,6 +127,7 @@
   physicalDesc: reagent-physical-desc-aromatic
   flavor: tea
   color: "#7EB626"
+  puddleColor: "#7EB62680" # Goob
   metamorphicSprite:
     sprite: Objects/Consumable/Drinks/greenteaglass.rsi
     state: icon_empty
@@ -336,6 +341,7 @@
 
 - type: reagent
   id: Nothing
+  puddleSpriteSet: Water # Goob
   name: reagent-name-nothing
   desc: reagent-desc-nothing
   #group: Drinks - Goob: Drinks guidebook split
@@ -356,6 +362,7 @@
   physicalDesc: reagent-physical-desc-fizzy
   flavor: atomiccola
   color: "#100800"
+  puddleSpriteSet: Shiny # Goob
   metamorphicSprite:
     sprite: Objects/Consumable/Drinks/nuclear_colaglass.rsi
     state: icon_empty
@@ -391,6 +398,7 @@
   physicalDesc: reagent-physical-desc-fizzy
   flavor: fizzy
   color: "#619494"
+  puddleSpriteSet: Shiny # Goob
   fizziness: 0.8
 
 - type: reagent
@@ -449,6 +457,7 @@
   physicalDesc: reagent-physical-desc-fizzy
   flavor: tonicwater
   color: "#0064C8"
+  puddleSpriteSet: Shiny # Goob
   fizziness: 0.4
   metamorphicSprite:
     sprite: Objects/Consumable/Drinks/tonicglass.rsi
@@ -467,6 +476,8 @@
   physicalDesc: reagent-physical-desc-translucent
   flavor: water
   color: "#75b1f0"
+  puddleSpriteSet: Water # Goob
+  puddleColor: "#ffffff" # Goob
   recognizable: true
   boilingPoint: 100.0
   meltingPoint: 0.0
@@ -563,7 +574,7 @@
   physicalDesc: reagent-physical-desc-frosty
   flavor: cold
   color: "#bed8e6"
-  flammability: -4 # Funky change
+  puddleSpriteSet: Splotchy # Goob
   recognizable: true
   meltingPoint: 0.0
   boilingPoint: 100.0
@@ -591,6 +602,7 @@
   physicalDesc: reagent-physical-desc-wormy
   flavor: cheapnoodles
   color: "#664300"
+  puddleSpriteSet: Shiny # Goob
   metabolisms:
     Food:
       effects:
@@ -605,6 +617,7 @@
   physicalDesc: reagent-physical-desc-wormy
   flavor: cheapnoodles
   color: "#664300"
+  puddleSpriteSet: Shiny # Goob
   metabolisms:
     Food:
       effects:
@@ -619,6 +632,7 @@
   physicalDesc: reagent-physical-desc-sweet
   flavor: arnoldpalmer
   color: "#d8cc5d"
+  puddleSpriteSet: Shiny # Goob
   metamorphicSprite:
     sprite: Objects/Consumable/Drinks/arnoldpalmer.rsi
     state: icon_empty

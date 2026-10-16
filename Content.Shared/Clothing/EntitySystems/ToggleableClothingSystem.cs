@@ -153,6 +153,7 @@ public sealed class ToggleableClothingSystem : EntitySystem
             BreakOnDamage = true,
             BreakOnMove = true,
             DistanceThreshold = 2,
+            FaceTarget = false, // Goob
         };
 
         if (!_doAfter.TryStartDoAfter(args))
@@ -182,6 +183,7 @@ public sealed class ToggleableClothingSystem : EntitySystem
             BreakOnDamage = true,
             BreakOnMove = true,
             DistanceThreshold = 2,
+            FaceTarget = false, // Goob
         };
 
         if (!_doAfter.TryStartDoAfter(args))

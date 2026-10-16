@@ -187,6 +187,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             user,
             logTypeOverride: explosive.LogImpactOverride); // Omu - control logging through comp);
 
+        RaiseExplosiveTriggered(uid); // Goob
+
         if (explosive.DeleteAfterExplosion ?? delete)
             QueueDel(uid);
     }
