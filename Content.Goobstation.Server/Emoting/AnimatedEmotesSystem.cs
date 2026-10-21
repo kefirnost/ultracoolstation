@@ -30,8 +30,7 @@ public sealed partial class AnimatedEmotesSystem : SharedAnimatedEmotesSystem
 
     public void PlayEmoteAnimation(Entity<AnimatedEmotesComponent> ent, ProtoId<EmotePrototype> prot)
     {
-        ent.Comp.Emote = prot;
-        Dirty(ent);
+        SetEmote(ent.AsNullable(), prot);
 
         /*if ((prot == "Flip") && _flipDodgeEnabled) Omu kill
             ApplyFlipEffects(ent);*/

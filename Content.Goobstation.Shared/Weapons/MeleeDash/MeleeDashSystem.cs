@@ -25,16 +25,15 @@ namespace Content.Goobstation.Shared.Weapons.MeleeDash;
 
 public sealed class MeleeDashSystem : EntitySystem
 {
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedGravitySystem _gravity = default!; // Omu
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!; // Omu
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private Emoting.SharedAnimatedEmotesSystem _emotes = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     private const int DashCollisionLayer = (int) CollisionGroup.MidImpassable;
 
@@ -162,10 +161,7 @@ public sealed class MeleeDashSystem : EntitySystem
         _throwing.TryThrow(user, dir, dash.DashForce, null, 0f, null, false, false, false, false, false);
         _audio.PlayPredicted(dash.DashSound, user, user);
 
-        if (dash.EmoteOnDash == null || !TryComp(user, out Emoting.AnimatedEmotesComponent? emotes))
-            return;
-
-        emotes.Emote = dash.EmoteOnDash;
-        Dirty(user, emotes);
+        if (dash.EmoteOnDash != null)
+            _emotes.SetEmote(user, dash.EmoteOnDash);
     }
 }

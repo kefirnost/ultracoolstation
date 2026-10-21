@@ -167,11 +167,8 @@ public abstract partial class SharedMartialArtsSystem
         DoDamage(ent, target, proto.DamageType, proto.ExtraDamage * power, out _);
         ApplyMultiplier(ent, args.AttackSpeedMultiplier, 0f, args.AttackSpeedMultiplierTime);
 
-        if (args.Emote != null && TryComp(ent, out AnimatedEmotesComponent? emotes))
-        {
-            emotes.Emote = args.Emote.Value;
-            Dirty(ent, emotes);
-        }
+        if (args.Emote != null)
+            _animatedEmotes.SetEmote(ent.Owner, args.Emote.Value);
 
         ComboPopup(ent, target, proto.Name);
         ent.Comp.LastAttacks.Clear();
