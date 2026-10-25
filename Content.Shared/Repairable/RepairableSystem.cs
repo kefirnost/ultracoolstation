@@ -117,7 +117,25 @@ public sealed partial class RepairableSystem : EntitySystem
         // Goob edit start
         bool repairStatus = ApplyRepairs(ent, args.User);
 
-        if (repairStatus && HasComp<BodyComponent>(ent) && args.Used != null)
+        if (!TryComp(ent.Owner, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
+            return;
+
+        var ipcSaysMoreRepairies = false; // Goob
+        var isBody = UsesPartRepair(ent); // Goob
+        if (isBody) // Goob
+            ipcSaysMoreRepairies = GoobTryRepairIPC(ent, args.User);
+        else if (ent.Comp.DamageValue != null)
+            RepairSomeDamage((ent, damageable), ent.Comp.DamageValue.Value, args.User);
+        else if (ent.Comp.Damage != null)
+            RepairSomeDamage((ent, damageable), ent.Comp.Damage, args.User);
+        else
+            RepairAllDamage((ent, damageable), args.User);
+
+        args.Repeat = ent.Comp.AutoDoAfter && (isBody ? ipcSaysMoreRepairies : damageable.TotalDamage > 0); // Goob
+        args.Args.Event.Repeat = args.Repeat;
+        args.Handled = true;
+
+        if (!args.Repeat)
         {
             float delay = ent.Comp.DoAfterDelay;
             if (args.User == ent.Owner)
