@@ -19,6 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
         <Label Name="DescriptionLabel"
                ClipText="True"
                Align="Center"
+               StyleClasses="HullPostTitle"
                HorizontalExpand="True"/>
         <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" MinHeight="24">
             <Button Name="DeleteButton"

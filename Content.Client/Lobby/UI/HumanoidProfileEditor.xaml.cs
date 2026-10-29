@@ -43,6 +43,7 @@ using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 using Content.Goobstation.Common.CCVar; // Goob Station - Barks
 using Content.Goobstation.Common.Barks; // Goob Station - Barks
+using Content.Goobstation.UIKit.UserInterface.Lobby; // Goob
 namespace Content.Client.Lobby.UI
 {
     [GenerateTypedNameReferences]
@@ -299,6 +300,7 @@ namespace Content.Client.Lobby.UI
             };
 
             RgbSkinColorContainer.AddChild(_rgbSkinColorSelector = new ColorSelectorSliders());
+            HullStyler.Apply(_rgbSkinColorSelector); // Goob
             _rgbSkinColorSelector.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv; // defaults color selector to HSV
             _rgbSkinColorSelector.OnColorChanged += _ =>
             {
@@ -606,7 +608,12 @@ namespace Content.Client.Lobby.UI
 
             if (traits.Count < 1)
             {
-                control.DisposeAllChildren();
+                TraitsList.AddChild(new Label
+                {
+                    Text = Loc.GetString("humanoid-profile-editor-no-traits"),
+                    StyleClasses = { "HullMuted" }, // Goob
+                });
+                return;
             }
 
             // get all traits, ordered first alphabetically, and then by global points cost.
@@ -632,7 +639,14 @@ namespace Content.Client.Lobby.UI
                 // Take note of categories with their own points count, so we can add category-points text later.
                 if (category.MaxTraitPoints > 0 && !categoriesWithPoints.ContainsKey(category))
                 {
-                    categoriesWithPoints.Add(category, 0);
+                    category = _prototypeManager.Index<TraitCategoryPrototype>(categoryId);
+                    // Label
+                    TraitsList.AddChild(new Label
+                    {
+                        Text = Loc.GetString(category.Name),
+                        Margin = new Thickness(0, 10, 0, 0),
+                        StyleClasses = { "HullSection" }, // Goob
+                    });
                 }
 
                 // Create a selector for this trait, but don't display it just yet.
@@ -810,7 +824,7 @@ namespace Content.Client.Lobby.UI
                 ("humanoid-profile-editor-antag-preference-no-button", 1)
             };
 
-            AntagList.AddChild(new Label { Text = Loc.GetString("humanoid-profile-editor-antag-roll-before-jobs") }); // Goobstation
+            AntagList.AddChild(new Label { Text = Loc.GetString("humanoid-profile-editor-antag-roll-before-jobs"), StyleClasses = { "HullFieldLabel" } }); // Goobstation
 
             foreach (var antag in _prototypeManager.EnumeratePrototypes<AntagPrototype>().OrderBy(a => Loc.GetString(a.Name)))
             {
@@ -1128,6 +1142,7 @@ namespace Content.Client.Lobby.UI
                     var jobIcon = _prototypeManager.Index(job.Icon);
                     icon.Texture = _sprite.Frame0(jobIcon.Icon);
                     selector.Setup(items, job.LocalizedName, 200, job.LocalizedDescription, icon, job.Guides);
+                    selector.SelectedColors = JobPriorityColors; // Goob
 
                     // Omu start
                     if (_alternateTitles.Enabled && _alternateTitles.TryGetTitles(job.ID, out var alternateTitles))
