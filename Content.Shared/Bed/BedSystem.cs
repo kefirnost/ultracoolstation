@@ -13,6 +13,7 @@ using Content.Shared.Power.EntitySystems;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
+using DamageableSystem = Content.Shared.Damage.DamageableSystem;
 namespace Content.Shared.Bed;
 
 public sealed class BedSystem : EntitySystem
