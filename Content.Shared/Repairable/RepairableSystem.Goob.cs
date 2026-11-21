@@ -14,9 +14,6 @@ namespace Content.Shared.Repairable;
 
 public sealed partial class RepairableSystem
 {
-    [Dependency] private readonly SharedBodySystem _bodySystem = default!;
-    [Dependency] private readonly HealingSystem _healingSystem = default!;
-    [Dependency] private readonly WoundSystem _wounds = default!;
 
     private bool UsesPartRepair(Entity<RepairableComponent> ent)
     {
