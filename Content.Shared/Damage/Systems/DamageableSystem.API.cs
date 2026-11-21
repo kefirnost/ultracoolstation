@@ -539,39 +539,6 @@ public sealed partial class DamageableSystem
         return damage;
     }
 
-    /// <summary>
-    /// Applies the two universal "All" modifiers, if set.
-    /// Individual damage source modifiers are set in their respective code.
-    /// </summary>
-    /// <param name="damage">The damage to be changed.</param>
-    public DamageSpecifier ApplyUniversalAllModifiers(DamageSpecifier damage)
-    {
-        // Checks for changes first since they're unlikely in normal play.
-        if (
-            MathHelper.CloseToPercent(UniversalAllDamageModifier, 1f) &&
-            MathHelper.CloseToPercent(UniversalAllHealModifier, 1f)
-        )
-            return damage;
-
-        foreach (var (key, value) in damage.DamageDict)
-        {
-            if (value == 0)
-                continue;
-
-            if (value > 0)
-            {
-                damage.DamageDict[key] *= UniversalAllDamageModifier;
-
-                continue;
-            }
-
-            if (value < 0)
-                damage.DamageDict[key] *= UniversalAllHealModifier;
-        }
-
-        return damage;
-    }
-
     public void ClearAllDamage(Entity<DamageableComponent?> ent)
     {
         SetAllDamage(ent, FixedPoint2.Zero);
