@@ -10,6 +10,7 @@ using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
+using DamageableSystem = Content.Shared.Damage.DamageableSystem;
 namespace Content.Shared._Shitcode.Heretic.Systems;
 
 public abstract class SharedFireBlastSystem : EntitySystem
