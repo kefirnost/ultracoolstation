@@ -1,0 +1,56 @@
+name: One-time Goob PR port
+on:
+  push:
+    branches:
+      - codex/port-goob-bootstrap
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  port:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out target base
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+      - name: Configure commit identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Fetch and port the five Goob PRs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git remote add goob https://github.com/Goob-Station/Goob-Station.git
+          git fetch --no-tags goob \
+            e539d4a5b2995ebc9c373769c4ae4754203efc75 \
+            8594298dd281d09c9b1414a231fc1564f9b68156 \
+            7690aec58157a1de1260e61fdb9d6220777bdd86 \
+            2ed7a5de7e07f318aea8faffe5ef8a1b3e1c912f \
+            64bc12d57222fc6ed6626e65554f738639de66e5
+          git switch -c codex/port-goob-bootstrap
+          for commit in \
+            e539d4a5b2995ebc9c373769c4ae4754203efc75 \
+            8594298dd281d09c9b1414a231fc1564f9b68156 \
+            7690aec58157a1de1260e61fdb9d6220777bdd86 \
+            2ed7a5de7e07f318aea8faffe5ef8a1b3e1c912f \
+            64bc12d57222fc6ed6626e65554f738639de66e5; do
+            echo "Cherry-picking $commit"
+            git cherry-pick -X theirs "$commit"
+          done
+          echo "Ported commits:"
+          git log --oneline -5
+      - name: Replace bootstrap branch with ported changes
+        run: git push --force origin HEAD:refs/heads/codex/port-goob-bootstrap
+      - name: Open pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --repo "${{ github.repository }}" \
+            --base master \
+            --head codex/port-goob-bootstrap \
+            --title "Port Goob PRs #7396, #7422, #7432, #7455 and #7463" \
+            --body "Ports the five requested Goob Station changes in merge order: #7396 (ports and Runechat), #7422 (jiggle/slime/emotes), #7432 (port revisions and fixes), #7455 (new lobby UI, news and voice UI), and #7463 (lobby UI follow-up). Cherry-picked onto the current OmuStation-based master with the 'theirs' conflict preference for overlapping hunks. Please review the diff and run the project CI before merging."
