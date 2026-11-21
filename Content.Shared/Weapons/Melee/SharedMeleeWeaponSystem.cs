@@ -880,11 +880,11 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
                 if (!modifiedDamage.WoundSeverityMultipliers.TryAdd(type, component.HeavyAttackWoundMultiplier))
                     modifiedDamage.WoundSeverityMultipliers[type] *= component.HeavyAttackWoundMultiplier;
             }
-            var damageResult = Damageable.TryChangeDamage(entity, modifiedDamage, origin: user, ignoreResistances: resistanceBypass, partMultiplier: component.HeavyPartDamageMultiplier); // Shitmed Change
+            var damageResult = Damageable.ChangeDamage(entity, modifiedDamage, origin: user, ignoreResistances: resistanceBypass, partMultiplier: component.HeavyPartDamageMultiplier); // Shitmed Change
             var comboEv = new ComboAttackPerformedEvent(user, entity, meleeUid, ComboAttackType.HarmLight);
             RaiseLocalEvent(user, comboEv);
 
-            if (damageResult != null && damageResult.GetTotal() > FixedPoint2.Zero)
+            if (!damageResult.Empty && damageResult.GetTotal() > FixedPoint2.Zero)
             {
                 // If the target has stamina and is taking blunt damage, they should also take stamina damage based on their blunt to stamina factor
                 if (damageResult.DamageDict.TryGetValue("Blunt", out var bluntDamage))

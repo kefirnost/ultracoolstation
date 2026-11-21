@@ -125,12 +125,12 @@ public sealed class HealingSystem : EntitySystem
         if (healing.ModifyBloodLevel != 0 && bloodstream != null)
             _bloodstreamSystem.TryModifyBloodLevel((target.Owner, bloodstream), -healing.ModifyBloodLevel); // Goobedit
 
-        var healed = _damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, true, origin: args.Args.User);
+        var healed = _damageable.ChangeDamage(target.AsNullable(), healing.Damage * _damageable.UniversalTopicalsHealModifier, true, origin: args.Args.User);
 
-        if (healed == null && healing.BloodlossModifier != 0)
+        if (healed.Empty && healing.BloodlossModifier != 0)
             return;
 
-        var total = healed?.GetTotal() ?? FixedPoint2.Zero;
+        var total = healed.GetTotal();
 
         // Re-verify that we can heal the damage.
         var dontRepeat = false;
@@ -408,9 +408,9 @@ public sealed class HealingSystem : EntitySystem
                         continue;
                     }
 
-                    var damageChanged = _damageable.TryChangeDamage(targetedWoundable, healingLeft, true, origin: args.User, ignoreBlockers: false);
+                    var damageChanged = _damageable.ChangeDamage(targetedWoundable, healingLeft, true, origin: args.User, ignoreBlockers: false);
 
-                    if (damageChanged is not null)
+                    if (!damageChanged.Empty)
                     {
                         healedTotal += -damageChanged;
                         healingLeft += -damageChanged;
@@ -421,8 +421,8 @@ public sealed class HealingSystem : EntitySystem
         }
         else
         {
-            var healed = _damageable.TryChangeDamage(ent, healing.Damage * _damageable.UniversalTopicalsHealModifier, true, origin: args.User);
-            if (healed != null)
+            var healed = _damageable.ChangeDamage(ent, healing.Damage * _damageable.UniversalTopicalsHealModifier, true, origin: args.User);
+            if (!healed.Empty)
                 healingLeft -= healed;
         }
 

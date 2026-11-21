@@ -103,7 +103,7 @@ public sealed partial class DamageableSystem
             return false;
 
         // raises DamageChangedEvent through here
-        OnEntityDamageChanged((body, body.Comp2), delta, interruptsDoAfters, origin, ignoreBlockers);
+        DamageChanged(body.Owner, body.Comp2, delta, interruptsDoAfters, origin, ignoreBlockers);
         return true;
     }
 

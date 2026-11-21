@@ -90,16 +90,16 @@ public sealed partial class RepairableSystem : EntitySystem
                         user);
             }
 
-            var damageChanged = _damageableSystem.TryChangeDamage(targetedWoundable, ent.Comp.Damage, true, false, origin: user);
-            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged?.GetTotal()}");
+            var damageChanged = _damageableSystem.ChangeDamage(targetedWoundable, ent.Comp.Damage, true, false, origin: user);
+            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged.GetTotal()}");
 
             if (_healingSystem.TryGetNextDamagedPart(ent.Owner, repairHealing, out var _))
                 return true;
         }
         else if (ent.Comp.Damage != null)
         {
-            var damageChanged = _damageableSystem.TryChangeDamage(ent.Owner, ent.Comp.Damage, true, false, origin: user);
-            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged?.GetTotal()}");
+            var damageChanged = _damageableSystem.ChangeDamage(ent.Owner, ent.Comp.Damage, true, false, origin: user);
+            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged.GetTotal()}");
         }
         else
         {

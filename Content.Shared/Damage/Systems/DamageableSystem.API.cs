@@ -36,7 +36,7 @@ public sealed partial class DamageableSystem
                 ent.Comp.Damage.DamageDict[type] = 0;
         }
 
-        OnEntityDamageChanged((ent, ent.Comp));
+        DamageChanged(ent.Owner, ent.Comp);
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public sealed partial class DamageableSystem
 
         ent.Comp.Damage = damage;
 
-        OnEntityDamageChanged((ent, ent.Comp));
+        DamageChanged(ent.Owner, ent.Comp);
     }
 
     /// <summary>
@@ -317,7 +317,7 @@ public sealed partial class DamageableSystem
         // Woundmed
         if (!damageDone.Empty || isWoundable && !damageDoneHypotheticalUncapped.Empty)
         {
-            OnEntityDamageChanged((ent, ent.Comp), damageDone, interruptsDoAfters, origin,
+            DamageChanged(ent.Owner, ent.Comp, damageDone, interruptsDoAfters, origin,
                 ignoreBlockers, uncappedDamage: damageDoneHypotheticalUncapped); // Woundmed
 
             if (isWoundable && !damageDone.Empty) // Woundmed
@@ -569,7 +569,7 @@ public sealed partial class DamageableSystem
 
         // Setting damage does not count as 'dealing' damage, even if it is set to a larger value, so we pass an
         // empty damage delta.
-        OnEntityDamageChanged((ent, ent.Comp), new DamageSpecifier());
+        DamageChanged(ent.Owner, ent.Comp, new DamageSpecifier());
     }
 
     /// <summary>

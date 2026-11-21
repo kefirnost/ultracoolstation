@@ -52,14 +52,14 @@ public abstract partial class SharedDamageOtherOnHitSystem
         if (args.Target == args.Component.Thrower) // Goobstation - Mjolnir
             return;
 
-        var dmg = _damageable.TryChangeDamage(args.Target, component.Damage * _damageable.UniversalThrownDamageModifier, component.IgnoreResistances, origin: args.Component.Thrower);
+        var dmg = _damageable.ChangeDamage(args.Target, component.Damage * _damageable.UniversalThrownDamageModifier, component.IgnoreResistances, origin: args.Component.Thrower);
 
         // For stuff that cares about it being attacked. GOOBSTATION!!!
         var attackedEvent = new AttackedEvent(args.Thrown, uid, args.Target.ToCoordinates());
         RaiseLocalEvent(args.Target, attackedEvent);
 
         // Log damage only for mobs. Useful for when people throw spears at each other, but also avoids log-spam when explosions send glass shards flying.
-        if (dmg != null && _mobQuery.HasComp(args.Target))
+        if (!dmg.Empty && _mobQuery.HasComp(args.Target))
             _adminLogger.Add(LogType.ThrowHit, $"{ToPrettyString(args.Target):target} received {dmg.GetTotal():damage} damage from collision");
 
         // Omu - not predicted so you know if it flashes its 100% a hit, same as projectiles

@@ -1086,10 +1086,10 @@ public abstract class SharedSpellsSystem : EntitySystem
 
             Popup(ev.Performer, "spell-soul-tap-dead-message-user", PopupType.LargeCaution);
 
-            var dmg = Damageable.TryChangeDamage(ev.Performer,
+            var dmg = Damageable.ChangeDamage(ev.Performer,
                 new DamageSpecifier(ProtoMan.Index(ev.KillDamage), 666),
                 true);
-            if ((dmg == null || dmg.GetTotal() < 1) && Timing.IsFirstTimePredicted)
+            if ((dmg.Empty || dmg.GetTotal() < 1) && Timing.IsFirstTimePredicted)
                 Body.GibBody(ev.Performer, contents: GibContentsOption.Gib);
         }
 
