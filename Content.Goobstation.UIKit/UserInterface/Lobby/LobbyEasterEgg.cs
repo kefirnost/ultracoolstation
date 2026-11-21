@@ -17,7 +17,6 @@ public sealed partial class LobbyEasterEgg : LayoutContainer
     [Dependency] private IResourceCache _cache = default!;
     [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private IInputManager _input = default!;
-    [Dependency] private IClyde _clyde = default!;
 
     private const string DrawerPath = "/Textures/_Goobstation/Interface/Lobby/drawer.png";
     private const string WrenchPath = "/Textures/Objects/Tools/wrench.rsi";
@@ -148,7 +147,6 @@ public sealed partial class LobbyEasterEgg : LayoutContainer
     private void SetWrenchHeld(bool held)
     {
         _wrenchHeld = held;
-        _clyde.MainWindow.SetRelativeMouseMode(held);
         if (_hatch != null)
             _hatch.WrenchHeld = held;
     }
