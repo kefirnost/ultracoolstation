@@ -26,6 +26,7 @@ using Robust.Shared.Physics.Systems;
 using Content.Goobstation.Common.Traits; // Omu Edit: Paraplegic Harpies
 
 
+using DamageableSystem = Content.Shared.Damage.DamageableSystem;
 namespace Content.Shared._EinsteinEngines.Flight;
 public abstract class SharedFlightSystem : EntitySystem
 {
