@@ -28,6 +28,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Atmos.Components;
+using DamageableSystem = Content.Shared.Damage.DamageableSystem;
 namespace Content.Shared._Trauma.Tackle;
 
 public sealed partial class TackleSystem : EntitySystem
