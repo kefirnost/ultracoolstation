@@ -10,6 +10,8 @@ using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
+using Content.Shared.Damage;
+
 namespace Content.Shared.Damage.Systems;
 
 public sealed class DamageOnHighSpeedImpactSystem : EntitySystem

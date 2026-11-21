@@ -17,17 +17,11 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Shared.Damage.Systems;
+namespace Content.Shared.Damage;
 
 public sealed partial class DamageableSystem
 {
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private WoundSystem _wounds = default!;
-    [Dependency] private IComponentFactory _factory = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
-    [Dependency] private EntityQuery<BodyPartComponent> _bodyPartQuery = default!;
-    [Dependency] private EntityQuery<WoundableComponent> _woundableQuery = default!;
+    // Shared dependencies and queries are declared in DamageableSystem.cs.
 
     public float ExplosionVitalMultiplier { get; private set; } = 1f;
     public float ExplosionNonVitalMultiplier { get; private set; } = 1f;

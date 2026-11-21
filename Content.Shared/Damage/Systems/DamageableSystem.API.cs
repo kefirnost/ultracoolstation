@@ -8,7 +8,7 @@ using Content.Shared.Damage.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared.Damage.Systems;
+namespace Content.Shared.Damage;
 
 public sealed partial class DamageableSystem
 {

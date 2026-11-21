@@ -165,7 +165,7 @@ public sealed partial class AnchorableSystem : EntitySystem
         // Omu start -- make sure that the item is not in a container or hand
         if (_containerSystem.IsEntityInContainer(uid) || xform.GridUid == null)
         {
-            _popup.PopupClient(Loc.GetString("anchorable-inventory"), uid, args.User);
+            _popup.PopupClient(Loc.GetString("anchorable-inventory"), uid, user);
             return;
         }
         //Omu end -- Screams

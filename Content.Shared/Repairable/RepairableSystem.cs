@@ -114,37 +114,13 @@ public sealed partial class RepairableSystem : EntitySystem
     {
         if (args.Cancelled)
             return;
-        // Goob edit start
-        bool repairStatus = ApplyRepairs(ent, args.User);
 
-        if (!TryComp(ent.Owner, out DamageableComponent? damageable) || damageable.TotalDamage == 0)
-            return;
+        var repairStatus = ApplyRepairs(ent, args.User);
 
-        var ipcSaysMoreRepairies = false; // Goob
-        var isBody = UsesPartRepair(ent); // Goob
-        if (isBody) // Goob
-            ipcSaysMoreRepairies = GoobTryRepairIPC(ent, args.User);
-        else if (ent.Comp.DamageValue != null)
-            RepairSomeDamage((ent, damageable), ent.Comp.DamageValue.Value, args.User);
-        else if (ent.Comp.Damage != null)
-            RepairSomeDamage((ent, damageable), ent.Comp.Damage, args.User);
-        else
-            RepairAllDamage((ent, damageable), args.User);
-
-        args.Repeat = ent.Comp.AutoDoAfter && (isBody ? ipcSaysMoreRepairies : damageable.TotalDamage > 0); // Goob
-        args.Args.Event.Repeat = args.Repeat;
+        // Repeat the do-after while another body part still needs repairing.
+        args.Repeat = repairStatus;
+        args.Args.Event.Repeat = repairStatus;
         args.Handled = true;
-
-        if (!args.Repeat)
-        {
-            float delay = ent.Comp.DoAfterDelay;
-            if (args.User == ent.Owner)
-            {
-                delay *= ent.Comp.SelfRepairPenalty;
-            }
-            args.Handled = _toolSystem.UseTool(args.Used.Value, args.User, ent.Owner, delay, ent.Comp.QualityNeeded, new RepairFinishedEvent(), ent.Comp.FuelCost); // args.Repeat doesn't work because this current event is a wrapped event of ToolDoAfterEvent
-        }
-        // Goob edit end
 
         var str = Loc.GetString("comp-repairable-repair", ("target", ent.Owner), ("tool", args.Used!));
         _popup.PopupClient(str, ent.Owner, args.User);

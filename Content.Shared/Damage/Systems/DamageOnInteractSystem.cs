@@ -16,6 +16,8 @@ using Content.Shared._Shitmed.Targeting; // Shitmed Change
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems; // Shitmed Change
 
+using Content.Shared.Damage;
+
 namespace Content.Shared.Damage.Systems;
 
 public sealed class DamageOnInteractSystem : EntitySystem
