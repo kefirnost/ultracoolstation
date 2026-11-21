@@ -10,16 +10,16 @@ jobs:
   port:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out target base
+      - name: Check out the existing partial port
         uses: actions/checkout@v4
         with:
-          ref: master
-          fetch-depth: 0
+          ref: port/goob-7396-7422-7432-7455-7463
+          fetch-depth: 1
       - name: Configure commit identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Fetch and port the five Goob PRs
+      - name: Fetch the five Goob commits
         shell: bash
         run: |
           set -euo pipefail
@@ -30,7 +30,11 @@ jobs:
             7690aec58157a1de1260e61fdb9d6220777bdd86 \
             2ed7a5de7e07f318aea8faffe5ef8a1b3e1c912f \
             64bc12d57222fc6ed6626e65554f738639de66e5
-          git switch -c codex/port-goob-bootstrap
+      - name: Apply the Goob commits on top of the partial port
+        shell: bash
+        run: |
+          set -euo pipefail
+          git switch -C port/goob-7396-7422-7432-7455-7463
           for commit in \
             e539d4a5b2995ebc9c373769c4ae4754203efc75 \
             8594298dd281d09c9b1414a231fc1564f9b68156 \
@@ -38,19 +42,41 @@ jobs:
             2ed7a5de7e07f318aea8faffe5ef8a1b3e1c912f \
             64bc12d57222fc6ed6626e65554f738639de66e5; do
             echo "Cherry-picking $commit"
-            git cherry-pick -X theirs "$commit"
+            if ! git cherry-pick -X theirs "$commit"; then
+              conflicts="$(git diff --name-only --diff-filter=U)"
+              if [ -z "$conflicts" ]; then
+                echo "Cherry-pick failed without resolvable file conflicts."
+                exit 1
+              fi
+              echo "Resolving remaining conflicts in favor of the incoming Goob version:"
+              while IFS= read -r path; do
+                echo "  $path"
+                if [ -e "$path" ]; then
+                  git add -- "$path"
+                else
+                  git rm -f --ignore-unmatch -- "$path"
+                fi
+              done <<< "$conflicts"
+              GIT_EDITOR=true git cherry-pick --continue
+            fi
           done
-          echo "Ported commits:"
-          git log --oneline -5
-      - name: Replace bootstrap branch with ported changes
-        run: git push --force origin HEAD:refs/heads/codex/port-goob-bootstrap
+          echo "Resulting history:"
+          git log --oneline -7
+      - name: Push the updated port branch
+        run: git push origin HEAD:refs/heads/port/goob-7396-7422-7432-7455-7463
       - name: Open pull request
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr create \
-            --repo "${{ github.repository }}" \
-            --base master \
-            --head codex/port-goob-bootstrap \
-            --title "Port Goob PRs #7396, #7422, #7432, #7455 and #7463" \
-            --body "Ports the five requested Goob Station changes in merge order: #7396 (ports and Runechat), #7422 (jiggle/slime/emotes), #7432 (port revisions and fixes), #7455 (new lobby UI, news and voice UI), and #7463 (lobby UI follow-up). Cherry-picked onto the current OmuStation-based master with the 'theirs' conflict preference for overlapping hunks. Please review the diff and run the project CI before merging."
+          title="Port Goob PRs #7396, #7422, #7432, #7455 and #7463"
+          existing="$(gh pr list --repo "${{ github.repository }}" --base master --state open --json title --jq "map(select(.title == \"$title\")) | length")"
+          if [ "$existing" = "0" ]; then
+            gh pr create \
+              --repo "${{ github.repository }}" \
+              --base master \
+              --head port/goob-7396-7422-7432-7455-7463 \
+              --title "$title" \
+              --body "Continues the existing partial Runechat port and brings in all requested Goob Station changes in merge order: #7396 (ports and Runechat), #7422 (jiggle/slime/emotes), #7432 (port revisions and fixes), #7455 (new lobby UI, news and voice UI), and #7463 (lobby UI follow-up). Cherry-picked onto the current OmuStation-based master. Remaining modify/delete conflicts were resolved in favor of the incoming Goob version. Please review the full diff and run project CI before merging."
+          else
+            echo "An equivalent port PR is already open; skipping duplicate PR creation."
+          fi
