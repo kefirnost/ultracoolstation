@@ -6,6 +6,7 @@ using Content.Client.Interactable.Components;
 using Content.Client.Viewport;
 using Content.Shared.CCVar;
 using Content.Shared.Interaction;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
@@ -13,6 +14,7 @@ using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Outline;
 
@@ -182,14 +184,14 @@ public sealed class InteractionOutlineSystem : EntitySystem
         if (!TryComp(ent.Owner, out SpriteComponent? sprite))
             return;
 
-        SetOutlinePostShader((ent.Owner, sprite), inInteractionRange, renderScale);
+        SetOutlinePostShader((ent.Owner, sprite!), inInteractionRange, renderScale);
     }
 
     private void RemoveOutline(Entity<InteractionOutlineComponent> ent)
     {
         if (TryComp(ent.Owner, out SpriteComponent? sprite))
         {
-            _sprite.RemovePostShader((ent.Owner, sprite), ContentPostShaderIds.InteractionOutline);
+            _sprite.RemovePostShader((ent.Owner, sprite!), ContentPostShaderIds.InteractionOutline);
             sprite.RenderOrder = 0;
         }
 
@@ -199,7 +201,7 @@ public sealed class InteractionOutlineSystem : EntitySystem
     private void UpdateOutline(Entity<InteractionOutlineComponent> ent, bool inInteractionRange, int renderScale)
     {
         if (!TryComp(ent.Owner, out SpriteComponent? sprite)
-            || !_sprite.HasPostShader((ent.Owner, sprite), ContentPostShaderIds.InteractionOutline)
+            || !_sprite.HasPostShader((ent.Owner, sprite!), ContentPostShaderIds.InteractionOutline)
             || inInteractionRange == ent.Comp.InRange && ent.Comp.LastRenderScale == renderScale)
         {
             return;
@@ -208,10 +210,10 @@ public sealed class InteractionOutlineSystem : EntitySystem
         ent.Comp.InRange = inInteractionRange;
         ent.Comp.LastRenderScale = renderScale;
 
-        SetOutlinePostShader((ent.Owner, sprite), ent.Comp.InRange, ent.Comp.LastRenderScale);
+        SetOutlinePostShader((ent.Owner, sprite!), ent.Comp.InRange, ent.Comp.LastRenderScale);
     }
 
-    private void SetOutlinePostShader(Entity<SpriteComponent?> sprite, bool inRange, int renderScale)
+    private void SetOutlinePostShader(Entity<SpriteComponent> sprite, bool inRange, int renderScale)
     {
         var shader = GetShader(inRange, renderScale);
         shader.SetParameter("outline_color", _outlineColor.GetOutlineColor(inRange)); // Goob

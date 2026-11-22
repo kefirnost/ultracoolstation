@@ -37,22 +37,18 @@ namespace Content.Server.Damage.Systems
             && itemToggle.Activated
             && !welder.TankSafe)
             {
-                var dmg = _damageableSystem.TryChangeDamage(args.Target, weldingDamage, origin: args.User);
-
-                if (dmg != null)
+                if (_damageableSystem.TryChangeDamage(args.Target, weldingDamage, out var actual, origin: args.User))
                     _adminLogger.Add(LogType.Damaged,
-                        $"{ToPrettyString(args.User):user} used {ToPrettyString(args.Used):used} as a welder to deal {dmg.GetTotal():damage} damage to {ToPrettyString(args.Target):target}");
+                        $"{ToPrettyString(args.User):user} used {ToPrettyString(args.Used):used} as a welder to deal {actual.GetTotal():damage} damage to {ToPrettyString(args.Target):target}");
 
                 args.Handled = true;
             }
             else if (component.DefaultDamage is {} damage
                 && _toolSystem.HasQuality(args.Used, component.Tools))
             {
-                var dmg = _damageableSystem.TryChangeDamage(args.Target, damage, origin: args.User);
-
-                if (dmg != null)
+                if (_damageableSystem.TryChangeDamage(args.Target, damage, out var actual, origin: args.User))
                     _adminLogger.Add(LogType.Damaged,
-                        $"{ToPrettyString(args.User):user} used {ToPrettyString(args.Used):used} as a tool to deal {dmg.GetTotal():damage} damage to {ToPrettyString(args.Target):target}");
+                        $"{ToPrettyString(args.User):user} used {ToPrettyString(args.Used):used} as a tool to deal {actual.GetTotal():damage} damage to {ToPrettyString(args.Target):target}");
 
                 args.Handled = true;
             }

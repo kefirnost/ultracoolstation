@@ -54,6 +54,7 @@ public sealed partial class WallStainSystem : EntitySystem
     [Dependency] private IRobustRandom _random = null!;
     [Dependency] private SharedPuddleSystem _puddle = null!;
     [Dependency] private SharedAudioSystem _audio = null!;
+    [Dependency] private IPrototypeManager _prototypeManager = null!;
 
     private Shared.Chemistry.Reaction.ReactiveReagentEffectEntry _stainCleanEffectEntry = null!;
 
@@ -99,13 +100,12 @@ public sealed partial class WallStainSystem : EntitySystem
         foreach (var offset in AdjacentTileOffsets)
         {
             var targetTile = tilePos + offset;
-            var anchored = _map.GetAnchoredEntities(gridUid.Value, grid, targetTile);
-            while (anchored.MoveNext(out var ent))
+            foreach (var ent in _map.GetAnchoredEntities(gridUid.Value, grid, targetTile))
             {
-                if (!IsWall(ent.Value))
+                if (!IsWall(ent))
                     continue;
 
-                hits.Add((ent.Value, offset));
+                hits.Add((ent, offset));
             }
         }
 
@@ -356,7 +356,7 @@ public sealed partial class WallStainSystem : EntitySystem
         if (!_solution.TryGetSolution(uid, comp.SolutionName, out _, out var solution))
             return;
 
-        var color = solution.GetColor(ProtoMan);
+        var color = solution.GetColor(_prototypeManager);
         comp.Color = color.WithAlpha(color.A * 0.6f);
         comp.StainState = solution.ContainsPrototype(WaterReagent) || solution.ContainsPrototype(SpaceCleanerReagent) ? "drip" : "splatter";
         comp.FillLevel = comp.MaxStainVolume > 0 ? (float) (solution.Volume / comp.MaxStainVolume) : 0f;
