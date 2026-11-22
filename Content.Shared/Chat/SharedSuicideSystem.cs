@@ -55,7 +55,7 @@ public sealed class SharedSuicideSystem : EntitySystem
             appliedDamageSpecifier.DamageDict[key] = Math.Ceiling((double) (value * lethalAmountOfDamage / totalDamage));
         }
 
-        _damageableSystem.TryChangeDamage(target, appliedDamageSpecifier, true, origin: target, targetPart: TargetBodyPart.Chest); // Shitmed Change
+        _damageableSystem.TryChangeDamage(target.AsNullable(), appliedDamageSpecifier, true, origin: target, targetPart: TargetBodyPart.Chest); // Shitmed Change
         Dirty(target, target.Comp);
     }
 
@@ -83,7 +83,7 @@ public sealed class SharedSuicideSystem : EntitySystem
         }
 
         var damage = new DamageSpecifier(damagePrototype, lethalAmountOfDamage);
-        _damageableSystem.TryChangeDamage(target, damage, true, origin: target, targetPart: TargetBodyPart.Chest); // Shitmed Change
+        _damageableSystem.TryChangeDamage(target.AsNullable(), damage, true, origin: target, targetPart: TargetBodyPart.Chest); // Shitmed Change
         Dirty(target, target.Comp);
     }
 

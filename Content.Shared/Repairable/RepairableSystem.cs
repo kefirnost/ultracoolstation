@@ -90,16 +90,16 @@ public sealed partial class RepairableSystem : EntitySystem
                         user);
             }
 
-            var damageChanged = _damageableSystem.TryChangeDamage(targetedWoundable, ent.Comp.Damage, true, false, origin: user);
-            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged?.GetTotal()}");
+            var damageChanged = _damageableSystem.ChangeDamage(targetedWoundable, ent.Comp.Damage, true, false, origin: user);
+            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged.GetTotal()}");
 
             if (_healingSystem.TryGetNextDamagedPart(ent.Owner, repairHealing, out var _))
                 return true;
         }
         else if (ent.Comp.Damage != null)
         {
-            var damageChanged = _damageableSystem.TryChangeDamage(ent.Owner, ent.Comp.Damage, true, false, origin: user);
-            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged?.GetTotal()}");
+            var damageChanged = _damageableSystem.ChangeDamage(ent.Owner, ent.Comp.Damage, true, false, origin: user);
+            _adminLogger.Add(LogType.Healed, $"{ToPrettyString(user):user} repaired {ToPrettyString(ent.Owner):target} by {damageChanged.GetTotal()}");
         }
         else
         {
@@ -114,19 +114,13 @@ public sealed partial class RepairableSystem : EntitySystem
     {
         if (args.Cancelled)
             return;
-        // Goob edit start
-        bool repairStatus = ApplyRepairs(ent, args.User);
 
-        if (repairStatus && HasComp<BodyComponent>(ent) && args.Used != null)
-        {
-            float delay = ent.Comp.DoAfterDelay;
-            if (args.User == ent.Owner)
-            {
-                delay *= ent.Comp.SelfRepairPenalty;
-            }
-            args.Handled = _toolSystem.UseTool(args.Used.Value, args.User, ent.Owner, delay, ent.Comp.QualityNeeded, new RepairFinishedEvent(), ent.Comp.FuelCost); // args.Repeat doesn't work because this current event is a wrapped event of ToolDoAfterEvent
-        }
-        // Goob edit end
+        var repairStatus = ApplyRepairs(ent, args.User);
+
+        // Repeat the do-after while another body part still needs repairing.
+        args.Repeat = repairStatus;
+        args.Args.Event.Repeat = repairStatus;
+        args.Handled = true;
 
         var str = Loc.GetString("comp-repairable-repair", ("target", ent.Owner), ("tool", args.Used!));
         _popup.PopupClient(str, ent.Owner, args.User);

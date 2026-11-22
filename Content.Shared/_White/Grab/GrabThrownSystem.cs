@@ -13,6 +13,7 @@ using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Robust.Shared.Physics.Components;
 
+using DamageableSystem = Content.Shared.Damage.DamageableSystem;
 namespace Content.Shared._White.Grab;
 
 public sealed class GrabThrownSystem : EntitySystem

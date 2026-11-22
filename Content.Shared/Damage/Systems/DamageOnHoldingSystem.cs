@@ -4,6 +4,8 @@ using Content.Shared.Damage.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
+using Content.Shared.Damage;
+
 namespace Content.Shared.Damage.Systems;
 
 public sealed class DamageOnHoldingSystem : EntitySystem

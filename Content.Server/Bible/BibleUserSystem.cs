@@ -148,7 +148,7 @@ namespace Content.Server.Bible
             string othersMessage;
             string selfMessage;
             // Goob start damagesystem update required
-            var damage = _damageableSystem.TryChangeDamage(args.Target.Value,
+            var tookDamage = _damageableSystem.TryChangeDamage(args.Target.Value,
                 component.Damage,
                 true,
                 origin: uid,
@@ -156,7 +156,7 @@ namespace Content.Server.Bible
                 ignoreBlockers: true,
                 splitDamage: SplitDamageBehavior.SplitEnsureAll);
 
-            if (damage == null || damage.Empty) // Goob end damagesystemupdate required
+            if (!tookDamage) // Goob end damagesystemupdate required
             {
                 othersMessage = Loc.GetString(component.LocPrefix + "-heal-success-others", ("user", userEnt), ("target", targetEnt), ("bible", uid));
                 selfMessage = Loc.GetString(component.LocPrefix + "-heal-success-self", ("target", targetEnt), ("bible", uid));

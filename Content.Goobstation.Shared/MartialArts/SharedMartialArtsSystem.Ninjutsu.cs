@@ -25,6 +25,8 @@ namespace Content.Goobstation.Shared.MartialArts;
 
 public abstract partial class SharedMartialArtsSystem
 {
+    [Dependency] private readonly TagSystem _tag = default!;
+
     public static ProtoId<AlertCategoryPrototype> NinjutsuAlertCategory = "Ninjutsu";
 
     private static readonly ProtoId<TagPrototype> WeaponAllowTag = "NinjutsuWeapon"; // Omu

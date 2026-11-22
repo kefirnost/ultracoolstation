@@ -58,10 +58,9 @@ binds:
 - function: VoicePushToTalkRadio # Goobstation - Voice chat
   type: State
   key: M
-- function: Tackle # Trauma
+- function: NamePeek # Goob
   type: State
-  key: Q
-  mod1: Alt
+  key: Alt
 # Shuttle
 - function: ShuttleStrafeUp
   type: State

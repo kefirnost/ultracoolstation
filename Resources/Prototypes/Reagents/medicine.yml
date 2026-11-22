@@ -10,6 +10,8 @@
   - Medical
   flavor: medicine
   color: "#081a80"
+  puddleSpriteSet: Acid # Goob
+  puddleColor: "#081a8080" # Goob
   metabolisms:
     Medicine:
       effects:
@@ -28,6 +30,7 @@
   physicalDesc: reagent-physical-desc-translucent
   flavor: medicine
   color: "#3a1d8a"
+  puddleSpriteSet: Shiny # Goob
   metabolisms:
     Medicine:
       effects:
@@ -88,6 +91,7 @@
   physicalDesc: reagent-physical-desc-chalky
   flavor: medicine
   color: "#64ffe6"
+  puddleSpriteSet: Splotchy # Goob
   metabolisms:
     Medicine:
       effects:
@@ -224,6 +228,8 @@
   physicalDesc: reagent-physical-desc-fizzy
   flavor: medicine
   color: "#0091ff"
+  puddleSpriteSet: Acid # Goob
+  puddleColor: "#0091ffCC" # Goob
   plantMetabolism:
   - !type:PlantAdjustToxins
     amount: -5
@@ -314,6 +320,8 @@
   physicalDesc: reagent-physical-desc-translucent
   flavor: medicine
   color: "#215263"
+  puddleSpriteSet: Shiny # Goob
+  puddleColor: "#21526370" # Goob
   metabolisms:
     Medicine:
       effects:
@@ -496,6 +504,7 @@
   physicalDesc: reagent-physical-desc-odorless
   flavor: medicine
   color: "#d2fffa"
+  puddleSpriteSet: Shiny # Goob
   metabolisms:
     Medicine:
       effects:
@@ -689,6 +698,7 @@
   physicalDesc: reagent-physical-desc-strong-smelling
   flavor: medicine
   color: "#bf3d19"
+  puddleSpriteSet: Splotchy # Goob
   metabolisms:
     Medicine:
       effects:
@@ -724,6 +734,7 @@
   physicalDesc: reagent-physical-desc-pungent
   flavor: medicine
   color: "#ff7db5"
+  puddleSpriteSet: Splotchy # Goob
   metabolisms:
     Medicine:
       effects:
@@ -977,8 +988,9 @@
   physicalDesc: reagent-physical-desc-salty
   flavor: salty
   color: "#0064C8"
-  metabolisms: # Omu, reclass saline as medcine instead of a drink.
-    Medicine:
+  puddleSpriteSet: Water # Goob
+  metabolisms:
+    Drink:
       effects:
         # Starlight start
         - !type:HealthChange
@@ -1075,6 +1087,7 @@
   physicalDesc: reagent-physical-desc-pungent
   flavor: medicine
   color: "#d49a2f"
+  puddleSpriteSet: Splotchy # Goob
   metabolisms:
     Poison:
       effects:
@@ -1106,6 +1119,7 @@
   physicalDesc: reagent-physical-desc-viscous
   flavor: medicine
   color: "#ba7d7d"
+  puddleSpriteSet: Acid # Goob
   metabolisms:
     Medicine:
       effects:
@@ -1172,6 +1186,7 @@
   physicalDesc: reagent-physical-desc-soothing
   flavor: medicine
   color: "#fcf7f9"
+  puddleSpriteSet: Shiny # Goob
   metabolisms:
     Medicine:
       effects:
@@ -1263,6 +1278,8 @@
   physicalDesc: reagent-physical-desc-translucent
   flavor: medicine
   color: "#404040"
+  puddleSpriteSet: Shiny # Goob
+  puddleColor: "#40404050" # Goob
   metabolisms:
     Medicine:
       effects:
@@ -1529,6 +1546,7 @@
   physicalDesc: reagent-physical-desc-holy
   flavor: holy
   color: "#91C3F7"
+  puddleSpriteSet: Water # Goob
   metabolisms:
     Drink:
       effects:
@@ -1918,6 +1936,7 @@
   physicalDesc: reagent-physical-desc-grainy
   flavor: medicine
   color: "#baa15d"
+  puddleSpriteSet: Powder # Goob
   metabolisms:
     Medicine:
       effects:
@@ -1950,6 +1969,8 @@
   physicalDesc: reagent-physical-desc-crystalline
   flavor: medicine
   color: "#27870a"
+  puddleSpriteSet: Powder # Goob
+  puddleColor: "#27870a50" # Goob
   metabolisms:
     Medicine:
       effects:

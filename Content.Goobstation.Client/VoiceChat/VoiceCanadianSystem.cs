@@ -19,6 +19,7 @@ public sealed class VoiceCanadianSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private static readonly ProtoId<ShaderPrototype> Shader = "VoiceCanadian";
+    public const string PostShaderId = "voice-canadian";
     private static readonly float[] HingeTargets = { -1f, 0f, 1f };
 
     private const float Pixel = 1f / EyeManager.PixelsPerMeter;

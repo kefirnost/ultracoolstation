@@ -56,6 +56,7 @@ namespace Content.Shared.Damage
         private EntityQuery<BodyComponent> _bodyQuery;
         private EntityQuery<ConsciousnessComponent> _consciousnessQuery;
         private EntityQuery<WoundableComponent> _woundableQuery;
+        private EntityQuery<BodyPartComponent> _bodyPartQuery;
 
         public float UniversalAllDamageModifier { get; private set; } = 1f;
         public float UniversalAllHealModifier { get; private set; } = 1f;
@@ -85,6 +86,7 @@ namespace Content.Shared.Damage
             _bodyQuery = GetEntityQuery<BodyComponent>();
             _consciousnessQuery = GetEntityQuery<ConsciousnessComponent>();
             _woundableQuery = GetEntityQuery<WoundableComponent>();
+            _bodyPartQuery = GetEntityQuery<BodyPartComponent>();
 
             // Damage modifier CVars are updated and stored here to be queried in other systems.
             // Note that certain modifiers requires reloading the guidebook.
