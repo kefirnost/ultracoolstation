@@ -117,7 +117,7 @@ public sealed partial class SlimeRegrowthSystem : EntitySystem
             _hunger.ModifyHunger(ent, -ent.Comp.HungerCost, hunger);
 
         _bloodstream.TryModifyBloodLevel(ent.Owner, -ent.Comp.BloodCost);
-        _body.RestoreMissingOrgans(ent.Owner);
+        RestoreMissingOrgans(ent.Owner);
 
         if (ent.Comp.Damage is { } damage)
         {
@@ -136,6 +136,36 @@ public sealed partial class SlimeRegrowthSystem : EntitySystem
         _audio.PlayPvs(ent.Comp.Sound, ent);
         _popup.PopupEntity(Loc.GetString("slime-regrowth-finish-others", ("user", ent)), ent, Filter.PvsExcept(ent), true);
         _popup.PopupEntity(Loc.GetString("slime-regrowth-finish-self"), ent, ent);
+    }
+
+    private void RestoreMissingOrgans(EntityUid uid)
+    {
+        if (!TryComp<BodyComponent>(uid, out var body) ||
+            body.Prototype is not { } prototypeId ||
+            !_prototype.TryIndex(prototypeId, out var prototype))
+            return;
+
+        foreach (var (partUid, part) in _body.GetBodyChildren(uid, body))
+        {
+            var slotId = part.ParentSlot?.Id ?? prototype.Root;
+            if (!prototype.Slots.TryGetValue(slotId, out var bodySlot))
+                continue;
+
+            foreach (var (organSlotId, organPrototype) in bodySlot.Organs)
+            {
+                if (!_body.TryCreateOrganSlot(partUid, organSlotId, out _, part) ||
+                    !_container.TryGetContainer(
+                        partUid,
+                        SharedBodySystem.GetOrganContainerId(organSlotId),
+                        out var organContainer) ||
+                    organContainer.ContainedEntities.Count > 0)
+                    continue;
+
+                var organ = Spawn(organPrototype, new EntityCoordinates(partUid, Vector2.Zero));
+                if (!_body.InsertOrgan(partUid, organ, organSlotId, part))
+                    Del(organ);
+            }
+        }
     }
 
     private bool CanRegrow(Entity<SlimeRegrowthComponent> ent, [NotNullWhen(false)] out string? failure)

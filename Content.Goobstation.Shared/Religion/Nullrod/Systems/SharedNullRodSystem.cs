@@ -54,7 +54,7 @@ public abstract partial class SharedNullRodSystem : EntitySystem
         if (_timing.CurTime < ent.Comp.NextPopupTime)
             return;
 
-        if (_damageableSystem.TryChangeDamage(user, ent.Comp.DamageOnUntrainedUse, origin: ent, targetPart: TargetBodyPart.All, ignoreBlockers: true) is null)
+        if (!_damageableSystem.TryChangeDamage(user, ent.Comp.DamageOnUntrainedUse, origin: ent, targetPart: TargetBodyPart.All, ignoreBlockers: true))
             return;
 
         _popupSystem.PopupEntity(Loc.GetString(ent.Comp.UntrainedUseString), user, user, PopupType.MediumCaution);

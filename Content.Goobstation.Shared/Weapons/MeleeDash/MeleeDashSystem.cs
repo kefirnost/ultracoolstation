@@ -34,6 +34,8 @@ public sealed class MeleeDashSystem : EntitySystem
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
 
     private const int DashCollisionLayer = (int) CollisionGroup.MidImpassable;
 
