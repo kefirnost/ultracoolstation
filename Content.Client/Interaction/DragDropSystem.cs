@@ -464,22 +464,11 @@ public sealed class DragDropSystem : SharedDragDropSystem
             // highlight depending on whether its in or out of range
             var shader = valid.Value ? _dropTargetInRangeShader! : _dropTargetOutOfRangeShader!; // Goob
             shader.SetParameter("outline_color", _outlineColor.GetOutlineColor(valid.Value)); // Goob
-            SetDragDropPostShader((entity, inRangeSprite), shader); // Goob
-            inRangeSprite.RenderOrder = EntityManager.CurrentTick.Value;
-            _nextHighlightedSprites.Add(inRangeSprite);
-        }
-
-        foreach (var highlightedSprite in _highlightedSprites)
-        {
-            if (_nextHighlightedSprites.Contains(highlightedSprite))
-                continue;
-            }
-
-            // highlight depending on whether its in or out of range
-            inRangeSprite.PostShader = valid.Value ? _dropTargetInRangeShader : _dropTargetOutOfRangeShader;
+            inRangeSprite.PostShader = shader;
             inRangeSprite.RenderOrder = EntityManager.CurrentTick.Value;
             _highlightedSprites.Add(inRangeSprite);
         }
+
     }
 
     private void RemoveHighlights()
